@@ -13,9 +13,9 @@ class Event extends Component {
                     <Router>
                         <div className="row">
                             <div className="col-lg-10  text-center">
-                                <div class="row nav-container">
-                                    <div class="col-lg-3"><Link to={"NewEvent"}>Create New Event</Link></div>
-                                    <div class="col-lg-3"><Link to={"ListEvent"}>List of Event</Link></div>                                </div>
+                                <div className="row nav-container">
+                                    <div className="col-lg-3"><Link to={"NewEvent"}>Create New Event</Link></div>
+                                    <div className="col-lg-3"><Link to={"ListEvent"}>List of Event</Link></div>                                </div>
                             </div>
                             <Route path="/newEvent" component={NewEvent} />
                             <Route exact path="/listEvent" component={ListEvent} />

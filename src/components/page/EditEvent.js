@@ -4,7 +4,7 @@ export class EditEvent extends Component {
     render() {
         return (
             <div>
-                edit event page
+                edit event page 
             </div>
         )
     }

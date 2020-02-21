@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 // import { Link, Router, Route } from 'react-router-dom';
 // import { BrowserRouter as Router } from 'react-router-dom';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import Detail from '../page/Detail'
-import SearchField from "react-search-field";
+import EditEvent from '../page/EditEvent'
+import SearchField from "react-search-field"
 
 class ListEvent extends Component {
     render() {
@@ -35,12 +36,12 @@ class ListEvent extends Component {
                                     <tr>
                                         <td>
                                             <button >
-                                                <Link to={"Detail"}> detail</Link>
+                                                <Link to={"Detail"}> Detail</Link>
                                             </button>
                                         </td>
                                         <td>
                                             <button >
-                                                edit
+                                                <Link to={"EditEvent"}> Edit</Link>
                                             </button>
                                         </td>
                                         <td>
@@ -53,7 +54,8 @@ class ListEvent extends Component {
                             </tbody>
                         </table>  
                         <br />
-                        <Route path="/detail" component={Detail} />   
+                        <Route path="/detail" component={Detail} />
+                        <Route path="/edit" component={EditEvent} />    
                     </div>           
                 </Router>
             </div>
