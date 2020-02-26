@@ -7,7 +7,51 @@ import EditEvent from '../page/EditEvent'
 import SearchField from "react-search-field"
 
 class ListEvent extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            events: [],
+            // isListId: false
+        }
+      }
+
+      componentDidMount() {
+        fetch('http://localhost:3001/listevents')
+        .then(res => res.json())
+        .then((data) => {
+          this.setState({ 
+            resStatus: data.status,
+            events: data.values })
+        })
+        .catch(
+          
+          )
+      }
+
+    //   handleDetail(list) {
+    //     console.log(list)
+    //     localStorage.setItem(
+    //         'list',
+    //         JSON.stringify(list)
+    //     );
+    //     // console.log(list);
+    //     // alert("redirect to DetailCustomer");
+    //     if (list.id == null) {
+    //         alert("data not found")
+    //     } else {
+    //         console.log("masuk sini");
+    //         this.setState ({
+    //             // isListId: true, 
+    //             detailCustomer:list
+    //         });
+    //         return true
+    //     }
+    // } 
+
     render() {
+        let objects = this.state.events
+        console.log("events = ");
+        console.log(objects);
         return (
             // <nav className="navbar navbar-default">
             <div>
@@ -29,10 +73,11 @@ class ListEvent extends Component {
                                     <th>Action</th>
                                 </tr>
                             </thead>
+                            {objects.map((list) => (
                             <tbody>
                                 <tr>
-                                    <td>1</td>
-                                    <td>Tawuran antar warga se-Jakarta</td>
+                                    <td>{list.id}</td>
+                                    <td>{list.name}</td>
                                     <tr>
                                         <td>
                                             <button >
@@ -52,6 +97,7 @@ class ListEvent extends Component {
                                     </tr>
                                 </tr>
                             </tbody>
+                            ))}
                         </table>  
                         <br />
                         <Route path="/detail" component={Detail} />

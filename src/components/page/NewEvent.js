@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import Input from '../commons/Input'
 import Button from '../commons/Button'
+import Textarea from '../commons/Textarea'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import DatePicker from "react-datepicker";
+import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
+// import { object } from 'prop-types';
 
 
 class NewEvent extends Component {
@@ -15,8 +18,8 @@ class NewEvent extends Component {
                 name:'',
                 description:'',
                 location:'',
-                startDate: '',
-                endDate: ''
+                startdate: moment(),
+                endDate: moment()
             },
         }
         // console.log(this.state);
@@ -25,8 +28,10 @@ class NewEvent extends Component {
         this.handleName = this.handleName.bind(this);
         this.handleDescription = this.handleDescription.bind(this);
         this.handleLocation = this.handleLocation.bind(this);
-        this.handleStarDate = this.handleStarDate.bind(this);
-        this.handleEndDate = this.handleEndDate.bind(this);
+
+
+        this.handleChangeStarDate = this.handleChangeStarDate.bind(this);
+        this.handleChangeEndDate = this.handleChangeEndDate.bind(this);
 
         // this.handleChange = this.handleChange.bind(this);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -78,24 +83,20 @@ class NewEvent extends Component {
     //         }
     //     }))
     // }
-     
-    handleStarDate = date => {
-        this.setState({
-            startDate: new Date()
-        });
-    };
 
-    handleEndDate = date => {
+    handleChangeStarDate(date) {
         this.setState({
-            endDate: new Date()
-        });
-    };
+            startdate: date
+        }, () => console.log(this.state.startdate));
+        // console.log(this.state.startDate);
+    }
 
-    // handleChange (date) {
-    //     this.setState({
-    //       startDate: date
-    //     });
-    //   };
+    handleChangeEndDate(date) {
+        this.setState({
+            enddate: date
+        }, () => console.log(this.state.enddate));
+        // console.log(this.state.startDate);
+    }
 
     handleFormSubmit(e) {
         e.preventDefault();
@@ -125,13 +126,17 @@ class NewEvent extends Component {
             name:'',
             description: '',
             location:'',
-            startDate: '',
-            endDate:''
+            startdate: '',
+            enddate:''
           },
         })
     }
 
     render() {
+
+        let object = this.state.newEvent.startdate;
+        console.log('isi object startdate');
+        console.log(object);
         return (
             <div>
                 {/* <h2>Create new event</h2> */}
@@ -152,7 +157,7 @@ class NewEvent extends Component {
                 <form className="form-horizontal" onSubmit={this.handleSubmit}>
                     <div className="form-group post-h1">
                         <div className="col-sm-6">
-                            <Input type={'textarea'}
+                            <Textarea type={'text'}
                                 title= {''} 
                                 name={'description'}
                                 value={this.state.newEvent.description}
@@ -181,12 +186,9 @@ class NewEvent extends Component {
                     <div className="form-group post-h1">
                         <div className="col-sm-6">
                         <DatePicker
-                            selected={this.state.startDate}
-                            onChange={this.handleStarDate}
-                            placeholder={'stardate'}
-                            name={this.state.newEvent.startDate}
-                            value={this.state.newEvent.startDate}
-                            // showTimeSelect
+                            selected={this.state.startdate}
+                            onChange={this.handleChangeStarDate}
+                            placeholderText="start date"
                         />
                         </div>
                     </div>
@@ -196,12 +198,9 @@ class NewEvent extends Component {
                     <div className="form-group post-h1">
                         <div className="col-sm-6">
                         <DatePicker
-                            selected={this.state.endDate}
-                            onChange={this.handleEndDate}
-                            placeholder={'enddate'}
-                            name={this.state.newEvent.endDate}
-                            value={this.state.newEvent.endDate}
-                            // showTimeSelect
+                            selected={this.state.enddate}
+                            onChange={this.handleChangeEndDate}
+                            placeholderText="end date"
                         />
                         </div>
                     </div>
