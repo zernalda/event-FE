@@ -2,11 +2,30 @@ import React, { Component } from 'react'
 import Input from '../commons/Input'
 import Button from '../commons/Button'
 import Textarea from '../commons/Textarea'
+// import {FormError} from '../page/FormError'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import DatePicker from "react-datepicker";
 import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
 // import { object } from 'prop-types';
+
+
+// validations
+
+const validate = ({ name, description
+    // , location, startdate, endDate
+ }) => {
+    return {
+        name:
+            !name || name.trim().length === 0
+            ? "Name is required"
+            : false,
+        description:
+            !description || description.trim().length === 0
+            ? "Description is required"
+            : false
+    };
+  };
 
 
 class NewEvent extends Component {
@@ -19,9 +38,13 @@ class NewEvent extends Component {
                 description:'',
                 location:'',
                 startdate: moment(),
-                endDate: moment()
-            },
+                endDate: moment(),
+                // intitialState
+                
+            }
+            // intitialState,
         }
+        
         // console.log(this.state);
 
         this.handleInput = this.handleInput.bind(this);
@@ -98,6 +121,17 @@ class NewEvent extends Component {
         // console.log(this.state.startDate);
     }
 
+    onChangeValidate = event => {
+        // taken straight from the official React Docs
+        // https://reactjs.org/docs/forms.html#handling-multiple-inputs
+        const target = event.target;
+        const value = target.type === "checkbox" ? target.checked : target.value;
+        const name = target.name;
+        this.setState({
+            [name]: value
+        });
+    };
+
     handleFormSubmit(e) {
         e.preventDefault();
         let eventData = this.state.newEvent;
@@ -132,13 +166,24 @@ class NewEvent extends Component {
         })
     }
 
+        // reduceFormValues
+        // : name, description, location, stardate, enddate
+        // : method slice for 'String'
+        // //  typeMismatch= for validating email format
+        // valid: x.checkValidity()
+
     render() {
+        
+        // const renderEmailValidationError
+        // call with {renderEmailValidationError} on return()
+
 
         let object = this.state.newEvent.startdate;
         console.log('isi object startdate');
         console.log(object);
         return (
             <div>
+                {/* <FormError /> */}
                 {/* <h2>Create new event</h2> */}
                 <form className="form-horizontal" onSubmit={this.handleSubmit}>
                     <div className="form-group post-h1">
@@ -149,7 +194,9 @@ class NewEvent extends Component {
                                 value={this.state.newEvent.name}
                                 placeholder = {'Event Name'}
                                 handleChange = {this.handleName}
+                                required
                                 />
+                            <span style={{backgroundColor:"red"}}>Name is Required</span>
                         </div>
                     </div>
                 </form>
@@ -185,11 +232,11 @@ class NewEvent extends Component {
                 <form className="form-horizontal" onSubmit={this.handleSubmit}>
                     <div className="form-group post-h1">
                         <div className="col-sm-6">
-                        <DatePicker
-                            selected={this.state.startdate}
-                            onChange={this.handleChangeStarDate}
-                            placeholderText="start date"
-                        />
+                            <DatePicker
+                                selected={this.state.startdate}
+                                onChange={this.handleChangeStarDate}
+                                placeholderText="start date"
+                            />
                         </div>
                     </div>
                 </form>
