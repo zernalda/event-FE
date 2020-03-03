@@ -4,15 +4,8 @@ import Button from '../commons/Button'
 import Textarea from '../commons/Textarea'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import DatePicker from "react-datepicker";
-import moment from 'moment';
+// import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
-
-
-const intitialState = {
-    newEvent : {
-        name:'' 
-    }
-}
 
 class NewEvent extends Component {
     constructor(props) {
@@ -23,10 +16,12 @@ class NewEvent extends Component {
                 name:'',
                 description:'',
                 location:'',
-                startdate: moment(),
-                enddate: moment()      
+                startdate: new Date(),
+                enddate: new Date()    
             },
-            nameError:''
+            nameError:'',
+            descriptionError:'',
+            locationError:''
         }
 
         this.handleInput = this.handleInput.bind(this);
@@ -34,16 +29,13 @@ class NewEvent extends Component {
         this.handleDescription = this.handleDescription.bind(this);
         this.handleLocation = this.handleLocation.bind(this);
 
-        this.handleChangeStarDate = this.handleChangeStarDate.bind(this);
-        this.handleChangeEndDate = this.handleChangeEndDate.bind(this);
+        this.handleStarDate = this.handleStarDate.bind(this);
+        this.handleEndDate = this.handleEndDate.bind(this);
 
-        // this.handleChange = this.handleChange.bind(this);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.handleClearForm = this.handleClearForm.bind(this);
 
     }
-
-    // passwordMatch = (confirmation, state) => (state.password === confirmation)
 
     handleName(e) {
         let value = e.target.value;
@@ -51,7 +43,30 @@ class NewEvent extends Component {
             {...prevState.newEvent, name: value
             }
         }))
+        console.log(value);
     }
+
+    // handleName(e) {
+    //     let value = e.target.value;
+    //     let errors = this.state.errors;
+    //     switch (value) {
+    //         case 'name': 
+    //           errors.value = 
+    //             value.length === 0
+    //               ? 'name must be filled'
+    //               : '';
+    //           break;
+    //         default:
+    //             break;
+    //         }
+    //         console.log("validasi switch");
+    //         console.log(value);
+    //     this.setState( prevState => ({ newEvent : 
+    //         {...prevState.newEvent, name: value
+    //         }
+    //     }))
+    //     console.log(value);
+    // }
 
     handleDescription(e) {
         let value = e.target.value;
@@ -82,31 +97,37 @@ class NewEvent extends Component {
         )
     }
 
-    handleChangeStarDate(date) {
-        this.setState({
-            startdate: date
-        }, () => console.log(this.state.newEvent.startdate));
-        // console.log(this.state.startDate);
-    }
+    handleStarDate = date => {
+        this.setState( prevState => ({ newEvent : 
+            {...prevState.newEvent, startdate: date
+            }
+        }))
+            console.log(this.state.newEvent.startdate);
+    };
 
-    handleChangeEndDate(date) {
-        this.setState({
-            enddate: date
-        }, () => console.log(this.state.newEvent.enddate));
-        // console.log(this.state.startDate);
-    }
+    handleEndDate = date => {
+        this.setState( prevState => ({ newEvent : 
+            {...prevState.newEvent, enddate: date
+            }
+        }))
+            console.log(this.state.newEvent.enddate);
+    };
+   
 
-    // handleChangeValidate = ({ target }) => {
-    //     this.setState({ [target.name]: target.value });
-    //  };
+    // handleChangeEndDate(date) {
+    //     this.setState({
+    //         enddate: date
+    //     }, () => console.log(this.state.newEvent.enddate));
+    // }
 
-     validate = () => {
+     validateName = () => {
         let nameError='';
+        console.log("validate");
+        console.log(this.state.newEvent);
 
-        if (!this.state.newEvent.name.includes('@')) {
-            nameError = 'invalid name';
+        if (!this.state.newEvent.name.trim().length) {
+            nameError = 'name must be filed';
         }
-
         if (nameError) {
             this.setState({ nameError });
             return true;
@@ -115,20 +136,55 @@ class NewEvent extends Component {
         }
      };
 
-    handleFormSubmit(e) {
+     validateDescription = () => {
+        let descriptionError='';
+
+        if (!this.state.newEvent.description.trim().length) {
+            descriptionError = 'description must be filed';
+        }
+        if (descriptionError) {
+            this.setState({ descriptionError });
+            return true;
+        } else{
+            return false;
+        }
+     };
+
+     validateLocation = () => {
+        let locationError='';
+
+        if (!this.state.newEvent.location.trim().length) {
+            locationError = 'location must be filed';
+        }
+        if (locationError) {
+            this.setState({ locationError });
+            return true;
+        } else{
+            return false;
+        }
+     };
+
+     handleFormSubmit(e) {
         e.preventDefault();
-        const isValid = this.validate();
-        console.log(isValid);
-        if (isValid === true) {
+        let isValidName = this.validateName();
+        let isValidDescription = this.validateDescription();
+        let isValidLocation = this.validateLocation();
+        // const isValidName 
+        // console.log(isValidName);
+        if (isValidName === true || isValidDescription === true || isValidLocation === true) {
             console.log(this.state.newEvent);
             console.log("masuk validasi");
             this.setState({newEvent : {
-                name:''   
+                name: this.state.newEvent.name,
+                description: this.state.newEvent.description,
+                location: this.state.newEvent.location,
+                startdate: this.state.newEvent.startdate,
+                enddate: this.state.newEvent.enddate
             }});
 
             
-        } else {
-            console.log("masuk ga ya?")
+        }
+         else {
             let eventData = this.state.newEvent;
 
             fetch('http://localhost:3001/createevent',{
@@ -144,10 +200,45 @@ class NewEvent extends Component {
                 console.log("Successful" + data);
                 })
             })
-        }
-
-        
+        } 
     }
+     
+
+    // handleFormSubmit(e) {
+    //     e.preventDefault();
+    //     let isValidName = this.validateName();
+    //     let isValidDescription = this.validateDescription();
+    //     let isValidLocation = this.validateLocation();
+    //     // const isValidName 
+    //     // console.log(isValidName);
+    //     if (isValidName === true ) {
+    //         console.log(this.state.newEvent);
+    //         console.log("masuk validasi");
+    //         this.setState({newEvent : {
+    //             name:'',
+    //             description:'',
+    //             location:''   
+    //         }});
+
+            
+    //     } else {
+    //         let eventData = this.state.newEvent;
+
+    //         fetch('http://localhost:3001/createevent',{
+    //             method: "POST",
+    //             body: JSON.stringify(eventData),
+    //             headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //             },
+    //         }).then(response => {
+    //             response.json().then(data =>{
+    //                 alert('success');
+    //             console.log("Successful" + data);
+    //             })
+    //         })
+    //     } 
+    // }
 
     handleClearForm(e) {
 
@@ -157,9 +248,12 @@ class NewEvent extends Component {
             name:'',
             description: '',
             location:'',
-            startdate: '',
-            enddate: ''
+            startdate: new Date(),
+            enddate: new Date()
           },
+        nameError:'',
+        descriptionError:'',
+        locationError:''
         })
     }
 
@@ -167,14 +261,14 @@ class NewEvent extends Component {
      
         return (
             <div>
-                <form  onSubmit={this.handleSubmit}>
+                <form  onSubmit={this.handleFormSubmit}>
                     <div className="form-group post-h1">
                         <div>
-                            <Input type={'email'}
+                            <Input type={'text'}
                                 title= {''} 
                                 name={'name'}
                                 value={this.state.newEvent.name}
-                                placeholder = {'validation email'}
+                                placeholder = {'validation name'}
                                 handleChange = {this.handleName}
                                 />
                                 <div style={{backgroundColor:"red"}}>{this.state.nameError}</div>
@@ -192,6 +286,7 @@ class NewEvent extends Component {
                                 placeholder = {'description'}
                                 handleChange = {this.handleDescription}
                                 />
+                                <div style={{backgroundColor:"red"}}>{this.state.descriptionError}</div>
                         </div>
                     </div>
                 </form>
@@ -199,23 +294,28 @@ class NewEvent extends Component {
                 <form className="form-horizontal" onSubmit={this.handleSubmit}>
                     <div className="form-group post-h1">
                         <div className="col-sm-6">
-                            <Input type={'textarea'}
+                            <Textarea type={'text'}
                                 title= {''} 
                                 name={'location'}
                                 value={this.state.newEvent.location}
                                 placeholder = {'location'}
                                 handleChange = {this.handleLocation}
                             />
+                             <div style={{backgroundColor:"red"}}>{this.state.locationError}</div>
                         </div>
                     </div>
                 </form>
 
-                <form className="form-horizontal" onSubmit={this.handleSubmit}>
+                <form className="form-horizontal" onSubmit={this.handleFormSubmit}>
                     <div className="form-group post-h1">
                         <div className="col-sm-6">
                             <DatePicker
-                                selected={this.state.startdate}
-                                onChange={this.handleChangeStarDate}
+                                selected={this.state.newEvent.startdate}
+                                onChange={this.handleStarDate}
+                                value={this.state.newEvent.startdate}
+                                // onSelect={this.handleSelect}
+                                name="startdate"
+                                // dateFormat="MM/dd/yyyy"
                                 placeholderText="start date"
                             />
                         </div>
@@ -226,8 +326,9 @@ class NewEvent extends Component {
                     <div className="form-group post-h1">
                         <div className="col-sm-6">
                         <DatePicker
-                            selected={this.state.enddate}
-                            onChange={this.handleChangeEndDate}
+                            selected={this.state.newEvent.enddate}
+                            onChange={this.handleEndDate}
+                            name="enddate"
                             placeholderText="end date"
                         />
                         </div>
