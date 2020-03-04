@@ -4,6 +4,7 @@ import Button from '../commons/Button'
 import Textarea from '../commons/Textarea'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import DatePicker from "react-datepicker";
+import DateTimePicker from 'react-datetime-picker'
 // import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -45,28 +46,6 @@ class NewEvent extends Component {
         }))
         console.log(value);
     }
-
-    // handleName(e) {
-    //     let value = e.target.value;
-    //     let errors = this.state.errors;
-    //     switch (value) {
-    //         case 'name': 
-    //           errors.value = 
-    //             value.length === 0
-    //               ? 'name must be filled'
-    //               : '';
-    //           break;
-    //         default:
-    //             break;
-    //         }
-    //         console.log("validasi switch");
-    //         console.log(value);
-    //     this.setState( prevState => ({ newEvent : 
-    //         {...prevState.newEvent, name: value
-    //         }
-    //     }))
-    //     console.log(value);
-    // }
 
     handleDescription(e) {
         let value = e.target.value;
@@ -112,13 +91,6 @@ class NewEvent extends Component {
         }))
             console.log(this.state.newEvent.enddate);
     };
-   
-
-    // handleChangeEndDate(date) {
-    //     this.setState({
-    //         enddate: date
-    //     }, () => console.log(this.state.newEvent.enddate));
-    // }
 
      validateName = () => {
         let nameError='';
@@ -186,6 +158,8 @@ class NewEvent extends Component {
         }
          else {
             let eventData = this.state.newEvent;
+            console.log("submit");
+            console.log(eventData);
 
             fetch('http://localhost:3001/createevent',{
                 method: "POST",
@@ -202,43 +176,6 @@ class NewEvent extends Component {
             })
         } 
     }
-     
-
-    // handleFormSubmit(e) {
-    //     e.preventDefault();
-    //     let isValidName = this.validateName();
-    //     let isValidDescription = this.validateDescription();
-    //     let isValidLocation = this.validateLocation();
-    //     // const isValidName 
-    //     // console.log(isValidName);
-    //     if (isValidName === true ) {
-    //         console.log(this.state.newEvent);
-    //         console.log("masuk validasi");
-    //         this.setState({newEvent : {
-    //             name:'',
-    //             description:'',
-    //             location:''   
-    //         }});
-
-            
-    //     } else {
-    //         let eventData = this.state.newEvent;
-
-    //         fetch('http://localhost:3001/createevent',{
-    //             method: "POST",
-    //             body: JSON.stringify(eventData),
-    //             headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //             },
-    //         }).then(response => {
-    //             response.json().then(data =>{
-    //                 alert('success');
-    //             console.log("Successful" + data);
-    //             })
-    //         })
-    //     } 
-    // }
 
     handleClearForm(e) {
 
@@ -313,11 +250,12 @@ class NewEvent extends Component {
                                 selected={this.state.newEvent.startdate}
                                 onChange={this.handleStarDate}
                                 value={this.state.newEvent.startdate}
-                                // onSelect={this.handleSelect}
+                                todayButton={"Bangkok"}
                                 name="startdate"
                                 // dateFormat="MM/dd/yyyy"
                                 placeholderText="start date"
                             />
+                            {/* <div style={{backgroundColor:"red"}}>{this.state.starDateError}</div> */}
                         </div>
                     </div>
                 </form>
